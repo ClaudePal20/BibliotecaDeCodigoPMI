@@ -1,0 +1,13 @@
+MPX,Microsoft Project for Windows,4.0,ANSI
+10,$,1,2,",",.
+11,2,0,1,8.00,40.00,$10.00/h,$15.00/h,1,0
+12,1,0,480,/,:,am,pm,20,20
+30,Project1,,,,04/05/2023,04/05/2023,0,04/05/2023,,$0.00,$0.00,$0.00,0h,0h,0h,0%,0d,0d,0d,0%,,,,,0d,0d
+60,Name,WBS,Outline Level,Cost,Start,Finish,Resource Names,Fixed,ID,Constraint Type,Unique ID,Outline Number
+61,1,2,3,30,50,51,72,80,90,91,98,99
+70,proyecto1,1,1,$10000.00,04/05/2023,04/05/2023,jose,No,1,As Soon As Possible,1,1
+70,proyecto2,2,1,$12300.00,04/05/2023,04/05/2023,carlos,No,2,As Soon As Possible,2,2
+70,proyecto3,3,1,$17000.00,04/05/2023,04/05/2023,emanuel,No,3,As Soon As Possible,3,3
+70,proyecto4,4,1,$12400.00,04/05/2023,04/05/2023,jose,No,4,As Soon As Possible,4,4
+70,proyecto5,5,1,$15000.00,04/05/2023,04/05/2023,karla,No,5,As Soon As Possible,5,5
+70,proyecto6,6,1,$20000.00,04/05/2023,04/05/2023,jose,No,6,As Soon As Possible,6,6
