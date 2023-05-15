@@ -10,10 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -128,12 +125,29 @@ public class PMBOKLibraryGUI extends Application {
             try {
                 mostrarSprintsFases(primaryStage, project);
             } catch (Exception ex) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Error al mostrar sprints: " + ex.getMessage());
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error al mostrar sprints");
+                alert.setHeaderText(null);
+
+                TextArea textArea = new TextArea(ex.getMessage());
+                textArea.setEditable(false);
+                textArea.setWrapText(true);
+                textArea.setMaxWidth(Double.MAX_VALUE);
+                textArea.setMaxHeight(Double.MAX_VALUE);
+
+                GridPane.setVgrow(textArea, Priority.ALWAYS);
+                GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+                GridPane contentPane = new GridPane();
+                contentPane.setMaxWidth(Double.MAX_VALUE);
+                contentPane.add(textArea, 0, 0);
+
+                alert.getDialogPane().setExpandableContent(contentPane);
                 alert.showAndWait();
             }
         });
-        BorderPane borderPane = new BorderPane();
 
+        BorderPane borderPane = new BorderPane();
         // Create the project details section
         VBox cuadroDetallesDeProyecto = new VBox();
         Label nombreLabel = new Label(project.getNombre());
@@ -157,17 +171,7 @@ public class PMBOKLibraryGUI extends Application {
         columnaDeNombres.setCellValueFactory(new PropertyValueFactory<>("Nombre"));
         TableColumn<Tarea, LocalDate> fechaDeInicio = new TableColumn<>("FechaDeInicio");
         fechaDeInicio.setCellValueFactory(new PropertyValueFactory<>("FechaDeInicio"));
-        fechaDeInicio.setCellFactory(column -> new TableCell<>() {
-            @Override
-            protected void updateItem(LocalDate fechaDeInicio, boolean empty) {
-                super.updateItem(fechaDeInicio, empty);
-                if (empty || fechaDeInicio == null) {
-                    setText(null);
-                } else {
-                    setText(fechaDeInicio.toString());
-                }
-            }
-        });
+
         TableColumn<Tarea, LocalDate> fechaParaTerminar = new TableColumn<>("FechaDeTerminado");
         fechaParaTerminar.setCellValueFactory(new PropertyValueFactory<>("FechaDeTerminado"));
         fechaParaTerminar.setCellFactory(column -> new TableCell<>() {
@@ -185,6 +189,7 @@ public class PMBOKLibraryGUI extends Application {
         Descripcion.setCellValueFactory(new PropertyValueFactory<>("Descripcion"));
         tablaDeTareas.getColumns().addAll(columnaDeNombres, fechaDeInicio, fechaParaTerminar, Descripcion);
         // Agregar las tareas a la vista de la tabla
+
         if (project.getTareas() == null) {
             project.setTareas(new ArrayList<>());
         }
