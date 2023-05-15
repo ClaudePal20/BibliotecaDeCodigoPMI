@@ -7,6 +7,8 @@
     <groupId>com.example</groupId>
     <artifactId>BibliotecaDeCodigoPMI</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <url>http://maven.apache.org</url>
     <name>BibliotecaDeCodigoPMI</name>
 
     <properties>
