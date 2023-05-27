@@ -9,11 +9,13 @@ module com.example.bibliotecadecodigopmi {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires eu.hansolo.fx.heatmap;
     requires com.almasb.fxgl.all;
     requires java.sql;
     requires mpxj;
     requires org.apache.commons.io;
     requires java.desktop;
+    requires org.junit.jupiter.api;
 
     opens com.example.bibliotecadecodigopmi to javafx.fxml;
     exports com.example.bibliotecadecodigopmi.gui;

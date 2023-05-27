@@ -144,14 +144,14 @@ public class ProjectManager extends PMBOKLibraryGUI {
         try {
             ProjectFile projectFile = getProjectFile();
             for (Project project : projects) {
-                net.sf.mpxj.Task parentTask = projectFile.addTask();
+                Task parentTask = projectFile.addTask();
                 parentTask.setName(project.getNombre());
                 parentTask.setStart(project.getFechaDeInicio());
                 parentTask.setFinish(project.getFechaDeTerminado());
                 parentTask.setCost(Double.parseDouble(project.getPresupuesto()));
                 parentTask.setResourceNames(project.getManagerDeProyecto());
                 for (Tarea tarea : project.getTareas()) {
-                    net.sf.mpxj.Task childTask = parentTask.addTask();
+                    Task childTask = parentTask.addTask();
                     childTask.setName(tarea.getNombre());
                     Date date = Date.from(tarea.getFechaDeInicio().atStartOfDay(ZoneId.systemDefault()).toInstant());
                     Date date2 = Date.from(tarea.getFechaDeTerminado().atStartOfDay(ZoneId.systemDefault()).toInstant());

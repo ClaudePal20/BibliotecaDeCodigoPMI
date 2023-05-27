@@ -1,8 +1,8 @@
 package com.example.bibliotecadecodigopmi.scrumlibrary;
 
 public class Recurso {
-    private String name;
-    private double costPerHour;
+    private final String name;
+    private final double costPerHour;
 
     public Recurso(String name, double costPerHour) {
         this.name = name;

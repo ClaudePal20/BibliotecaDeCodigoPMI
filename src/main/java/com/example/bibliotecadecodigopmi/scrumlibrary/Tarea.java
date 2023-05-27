@@ -1,5 +1,6 @@
 package com.example.bibliotecadecodigopmi.scrumlibrary;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 public class Tarea {
     private String Nombre;
@@ -12,6 +13,7 @@ public class Tarea {
         this.FechaDeInicio = FechaDeInicio;
         this.FechaDeTerminado = FechaDeTerminado;
         this.Descripcion= Descripcion;
+        this.recursos = new ArrayList<>();
     }
     public String getNombre() {
         return Nombre;

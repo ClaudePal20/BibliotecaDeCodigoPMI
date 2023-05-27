@@ -1,4 +1,5 @@
 package com.example.bibliotecadecodigopmi.scrumlibrary;
+
 public abstract class Sprint {
     protected int numero;
     protected String objetivo;
@@ -11,47 +12,26 @@ public abstract class Sprint {
         this.duracionEnSemanas = duracionEnSemanas;
         this.nombre = nombre;
     }
-    public abstract void ejecutar();
-}
-
-class SprintPlanificacion extends Sprint {
-
-    //Aqui van los productos a entregar al final o bien las funcionalidades o requerimientos
-    //a crear
-    private String[] entregables;
-    public SprintPlanificacion(int numero, String objetivo, int duracionEnSemanas, String[] entregables, String nombre) {
-        super(numero, objetivo, duracionEnSemanas,nombre);
-        this.entregables = entregables;
+    public int setSemanas(int duracionEnSemanas) {
+        return this.duracionEnSemanas = duracionEnSemanas;
     }
-    @Override
-    public void ejecutar() {
-        System.out.println("Ejecutando Sprint de Planificación...");
-        // Implementación específica para Sprint de Planificación
+    public int getSemanas() {
+        return duracionEnSemanas;
     }
-}
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+    public int getNumero() {
+        return numero;
+    }
+    public String getNombre(){
+        return nombre;
+    }
+    public String getObjetivo(){return objetivo;}
+    public void setObjetivo(String objetivo){this.objetivo = objetivo;}
 
-class SprintDesarrollo extends Sprint {
-    private int puntosDeHistoria;
-    public SprintDesarrollo(int numero, String objetivo, int duracionEnSemanas, int puntosDeHistoria,String nombre) {
-        super(numero, objetivo, duracionEnSemanas, nombre);
-        this.puntosDeHistoria = puntosDeHistoria;
-    }
-    @Override
-    public void ejecutar() {
-        System.out.println("Ejecutando Sprint de Desarrollo...");
-        // Implementación específica para Sprint de Desarrollo
+    public void setNombre(String nombre){
+        this.nombre = nombre;
     }
 }
 
-class SprintTesting extends Sprint {
-    private int casosDePrueba;
-    public SprintTesting(int numero, String objetivo, int duracionEnSemanas, int casosDePrueba,String nombre) {
-        super(numero, objetivo, duracionEnSemanas,nombre);
-        this.casosDePrueba = casosDePrueba;
-    }
-    @Override
-    public void ejecutar() {
-        System.out.println("Ejecutando Sprint de Testing...");
-        // Implementación específica para Sprint de Testing
-    }
-}
