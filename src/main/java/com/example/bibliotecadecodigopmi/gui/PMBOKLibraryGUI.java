@@ -8,6 +8,9 @@
     import javafx.scene.Scene;
     import javafx.scene.control.*;
     import javafx.scene.control.cell.PropertyValueFactory;
+    import javafx.scene.effect.DropShadow;
+    import javafx.scene.effect.Effect;
+    import javafx.scene.input.KeyCode;
     import javafx.scene.layout.*;
     import javafx.stage.Modality;
     import javafx.stage.Stage;
@@ -17,6 +20,7 @@
     import java.util.Arrays;
     import java.util.Optional;
 
+    @SuppressWarnings("ALL")
     public class PMBOKLibraryGUI extends Application{
         private VBox projectDetailsLayout;
         private ObservableList<Project> observableProjects;
@@ -69,7 +73,7 @@
             Button exportButtonMPXJ = new Button("Exportar proyectos a MPXJ");
             exportButtonMPXJ.setOnAction(event -> {
                 try {
-                    projectManager.exportToMPXJ(projectManager.getProjects(), "proyectos.mpxj");
+                    projectManager.exportToMPXJ(projectManager.getProjects());
                     Alert alert = new Alert(Alert.AlertType.INFORMATION, "Los proyectos se han exportado a MPXJ correctamente");
                     alert.showAndWait();
                 } catch (Exception ex) {
@@ -93,15 +97,33 @@
                     alert.showAndWait();
                 }
             });
-            HBox buttonsBox2 = new HBox(10, exportButtonMPXJ, exportButton, importButtonMPXJ);
+            //Crear boton para importar desde XML
+            Button importButtonXML = new Button("Importar proyectos desde XML");
+            importButtonXML.setOnAction(event ->{
+                try{
+                    this.observableProjects = FXCollections.observableList(projectManager.importFromXML("proyectos2.xml"));
+                    listaDeProyectos.setItems(observableProjects);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Los proyectos se han importado desde XML correctamente");
+                    alert.showAndWait();
+                }catch(Exception ex){
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Error al importar proyectos desde XML: " + ex.getMessage());
+                    alert.showAndWait();
+                }
+            });
+            HBox buttonsBox2 = new HBox(10, exportButtonMPXJ, exportButton, importButtonMPXJ, importButtonXML);
             buttonsBox2.setAlignment(Pos.CENTER_LEFT);
             bordePrincipal.setTop(buttonsBox2);
-    
+
         }
     
         private void setupUI(Stage primaryStage) {
             // Create the main layout
             BorderPane bordePrincipal = new BorderPane();
+            //Nuevo efecto
+            Effect shadow = new DropShadow();
+            bordePrincipal.setEffect(shadow);
+            //bordeprincipal setstyle con un color claro cercano al amarillo
+            bordePrincipal.setStyle("-fx-background-color: #FFFFE0;");
             bordePrincipal.setPadding(new Insets(10));
             bordePrincipal.setPrefSize(1000, 600);
             // Create the project list view
@@ -126,16 +148,20 @@
                 // Llamar a la clase Documentacion y su método setupDocumentacion
             com.example.bibliotecadecodigopmi.gui.Documentacion documentacion = new Documentacion();
             BorderPane bordePrincipal2 = documentacion.setupDocumentacion();
-    
+            bordePrincipal2.setStyle("-fx-background-color: #FFFFE0;");
+
             //Pestaña de proyectos
             TabPane tabPane = new TabPane();
             Tab tab1 = new Tab();
             tab1.setText("Proyectos");
+            tab1.setClosable(false);
             tab1.setContent(bordePrincipal);
+
     
             //Pestaña de documentacion
             Tab tab2 = new Tab();
             tab2.setText("Documentacion");
+            tab2.setClosable(false);
             tab2.setContent(bordePrincipal2);
     
             tabPane.getTabs().add(tab1);
@@ -216,7 +242,6 @@
             Descripcion.setCellValueFactory(new PropertyValueFactory<>("Descripcion"));
             tablaDeTareas.getColumns().addAll(columnaDeNombres, fechaDeInicio, fechaParaTerminar, Descripcion);
             // Agregar las tareas a la vista de la tabla
-    
             if (project.getTareas() == null) {
                 project.setTareas(new ArrayList<>());
             }
@@ -351,9 +376,10 @@
     
             // Crear los campos de edición
             TextField nombreTextField = new TextField(tareaSeleccionada.getNombre());
-            DatePicker fechaInicioDatePicker = new DatePicker(tareaSeleccionada.getFechaDeInicio());
-            DatePicker fechaTerminadoDatePicker = new DatePicker(tareaSeleccionada.getFechaDeTerminado());
+            DatePicker fechaInicioDatePicker = new DatePicker();
+            DatePicker fechaTerminadoDatePicker = new DatePicker();
             TextArea descripcionTextArea = new TextArea(tareaSeleccionada.getDescripcion());
+
             // Crear el botón guardar
             Button guardarButton = new Button("Guardar");
             guardarButton.setOnAction(event -> {
@@ -444,7 +470,9 @@
             Button botonAgregarTesting = new Button("Agregar");
             Button botonEditarTesting = new Button("Editar");
             Button botonEliminarTesting = new Button("Eliminar");
-            Button botonGuardar = new Button("Cerrar");
+            Button botonGuardar = new Button("Guardar");
+            Button botonGuardar2 = new Button("Guardar");
+            Button botonGuardar3 = new Button("Guardar");
             //Agregar funcionalidad a los botones
             botonAgregarDesarrollo.setOnAction(event -> {
                 SprintDesarrollo sprintDesarrollo = mostrarPanelAgregarSprintDesarrollo();
@@ -507,29 +535,32 @@
             });
             botonGuardar.setOnAction(event -> {
                 //Agregar todos los datos al proyecto
-                project.setSprintsDesarrollo((ObservableList)tablaDesarrollo.getItems());
-                project.setSprintsTesting((ObservableList)tablaDesarrollo.getItems());
-                project.setSprintsPlanificacion((ObservableList)tablaDesarrollo.getItems());
+                project.setSprintsDesarrollo(tablaDesarrollo.getItems());
+                project.setSprintsTesting(tablaTesting.getItems());
+                project.setSprintsPlanificacion(tablaPlanificacion.getItems());
                 SprintsPanel.close();
             });
+
             //Crear contenedor para cada tipo de sprint
             VBox contenedorDesarrollo = new VBox();
             contenedorDesarrollo.getChildren().addAll(tablaDesarrollo, botonAgregarDesarrollo, botonEditarDesarrollo, botonEliminarDesarrollo,botonGuardar);
             VBox contenedorPlanificacion = new VBox();
-            contenedorPlanificacion.getChildren().addAll(tablaPlanificacion, botonAgregarPlanificacion, botonEditarPlanificacion, botonEliminarPlanificacion,botonGuardar);
+            contenedorPlanificacion.getChildren().addAll(tablaPlanificacion, botonAgregarPlanificacion, botonEditarPlanificacion, botonEliminarPlanificacion,botonGuardar2);
             VBox contenedorTesting = new VBox();
-            contenedorTesting.getChildren().addAll(tablaTesting, botonAgregarTesting, botonEditarTesting, botonEliminarTesting, botonGuardar);
+            contenedorTesting.getChildren().addAll(tablaTesting, botonAgregarTesting, botonEditarTesting, botonEliminarTesting, botonGuardar3);
+
             //Crear pestañas para cada tipo de sprint
             Tab tabDesarrollo = new Tab("Desarrollo", contenedorDesarrollo);
             Tab tabPlanificacion = new Tab("Planificacion", contenedorPlanificacion);
             Tab tabTesting = new Tab("Testing", contenedorTesting);
+
             //Agregar pestañas a la ventana
             TabPane tabPane = new TabPane();
             tabPane.getTabs().addAll(tabDesarrollo, tabPlanificacion, tabTesting);
+
             //Crear escena
             Scene scene = new Scene(tabPane, 800, 600);
-    
-    
+
             //Mostrar ventana
             SprintsPanel.setScene(scene);
             SprintsPanel.show();
@@ -565,11 +596,9 @@
             //Crear botones
             Button botonGuardar = new Button("Guardar");
             Button botonCancelar = new Button("Cancelar");
-            Button agregarEntregableBoton = new Button("Agregar Entregable");
             //Agregar botones al contenedor
             contenedor.add(botonGuardar, 0, 5);
             contenedor.add(botonCancelar, 1, 5);
-            contenedor.add(agregarEntregableBoton, 1, 3);
             //Crear escena
             Scene scene = new Scene(contenedor, 400, 300);
     
@@ -673,10 +702,12 @@
             Button botonGuardar = new Button("Guardar");
             Button botonCancelar = new Button("Cancelar");
             Button agregarEntregableBoton = new Button("Agregar Entregable");
+
             //Agregar botones al contenedor
             contenedor.add(botonGuardar, 0, 5);
             contenedor.add(botonCancelar, 1, 5);
             contenedor.add(agregarEntregableBoton, 1, 3);
+
             //Crear escena
             Scene scene = new Scene(contenedor, 400, 300);
             String[] entregables = campoEntregables.getText().split(",");
@@ -691,71 +722,97 @@
                 primaryStage.close();
             });
             botonCancelar.setOnAction(event -> primaryStage.close());
+
             //Mostrar ventana
             primaryStage.setScene(scene);
             primaryStage.show();
         }
-    
+
         private SprintPlanificacion mostrarPanelAgregarSprintPlanificacion() {
-            SprintPlanificacion sprintPlanificacion = new SprintPlanificacion(0,null,0,null,null);
-            Stage primaryStage3 = new Stage();
-            primaryStage3.setTitle("Agregar Sprint Desarrollo");
-    
-            //Crear contenedor
+            SprintPlanificacion sprintPlanificacion = new SprintPlanificacion(0, null, 0, null, null);
+
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("Agregar Sprint Planificación");
+
+            // Crear contenedor
             GridPane contenedor = new GridPane();
             contenedor.setPadding(new Insets(10));
             contenedor.setHgap(10);
             contenedor.setVgap(10);
-    
-            //Crear campos de texto
+
+            // Crear campos de texto
             TextField campoNombre = new TextField();
             campoNombre.setPromptText("Nombre");
             TextField campoObjetivo = new TextField();
             campoObjetivo.setPromptText("Objetivo");
             Spinner<Integer> spinnerDuracion = new Spinner<>(1, 100, 1);
             spinnerDuracion.setEditable(true);
-            //TextField para un arreglo de strings
+
+            //Crear campo para los entregables
             TextField campoEntregables = new TextField();
             campoEntregables.setPromptText("Entregables");
-    
-    
-            //Agregar campos de texto al contenedor
+            //Crear boton para agregar entregables
+            Button agregarEntregableBoton = new Button("Agregar Entregable");
+            //Crear combobox para los entregables
+            ComboBox<String> comboEntregables = new ComboBox<>();
+            comboEntregables.setPromptText("Entregables");
+            //Crear boton para eliminar entregables
+            Button eliminarEntregableBoton = new Button("Eliminar Entregable");
+            //Accion para cuando se presiona el boton de agregar entregables
+            agregarEntregableBoton.setOnAction(event -> {
+                comboEntregables.getItems().add(campoEntregables.getText());
+                campoEntregables.clear();
+            });
+            //Accion para cuando se presiona el boton de eliminar entregables
+            eliminarEntregableBoton.setOnAction(event -> comboEntregables.getItems().remove(comboEntregables.getValue()));
+
+            // Agregar campos de texto al contenedor
             contenedor.add(campoNombre, 0, 0);
             contenedor.add(campoObjetivo, 0, 1);
             contenedor.add(spinnerDuracion, 0, 2);
             contenedor.add(campoEntregables, 0, 3);
-    
-            //Crear botones
+            contenedor.add(agregarEntregableBoton, 1, 3);
+            contenedor.add(comboEntregables, 0, 4);
+            contenedor.add(eliminarEntregableBoton, 1, 4);
+
+            // Crear botones
             Button botonGuardar = new Button("Guardar");
             Button botonCancelar = new Button("Cancelar");
-            Button agregarEntregableBoton = new Button("Agregar Entregable");
-    
-            //Agregar botones al contenedor
+
+            // Agregar botones al contenedor
             contenedor.add(botonGuardar, 0, 5);
             contenedor.add(botonCancelar, 1, 5);
-            contenedor.add(agregarEntregableBoton, 1, 3);
-    
-            //Crear escena
+
+            // Crear escena
             Scene scene = new Scene(contenedor, 400, 300);
-    
-            //Crear arreglo para los entregables
-            String[] entregables = campoEntregables.getText().split(",");
-            ArrayList<String> Entregables = new ArrayList<>(Arrays.asList(entregables));
-    
-            agregarEntregableBoton.setOnAction(event -> Entregables.add(campoEntregables.getText()));
+
             botonGuardar.setOnAction(event -> {
                 sprintPlanificacion.setNombre(campoNombre.getText());
                 sprintPlanificacion.setObjetivo(campoObjetivo.getText());
                 sprintPlanificacion.setDuracionEnSemanas(spinnerDuracion.getValue());
-                //Convert campoEntregables to array
-                sprintPlanificacion.setEntregables(Entregables);
-                primaryStage3.close();
+                sprintPlanificacion.setEntregables(new ArrayList<>(comboEntregables.getItems()));
+
+                primaryStage.close();
             });
-            botonCancelar.setOnAction(event -> primaryStage3.close());
-            primaryStage3.setScene(scene);
-            primaryStage3.show();
+
+            botonCancelar.setOnAction(event -> primaryStage.close());
+
+            // Agregar evento para agregar entregables
+            comboEntregables.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    comboEntregables.getItems().add(comboEntregables.getEditor().getText());
+                    comboEntregables.getEditor().clear();
+                }
+            });
+
+            // Mostrar ventana
+            primaryStage.setScene(scene);
+            primaryStage.showAndWait();
+
             return sprintPlanificacion;
         }
+
+
     
         private void mostrarPanelEditarSprintDesarrollo(SprintDesarrollo sprintDesarrolloSeleccionado) {
             Stage primaryStage = new Stage();
@@ -861,5 +918,4 @@
     
             return sprintDesarrollo;
         }
-    
     }

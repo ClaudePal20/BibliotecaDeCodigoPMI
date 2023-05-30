@@ -5,7 +5,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-public class Project {
+public class Project{
     private String nombre;
     private LocalDate FechaDeInicio;
     private LocalDate FechaDeTerminado;

@@ -1,6 +1,6 @@
 package com.example.bibliotecadecodigopmi.scrumlibrary;
 
-public abstract class Sprint {
+public abstract class Sprint implements DatosGenerales{
     protected int numero;
     protected String objetivo;
     protected int duracionEnSemanas;

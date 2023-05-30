@@ -6,9 +6,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -63,16 +67,25 @@ public class Documentacion extends Application {
         documentacionLayout.setPadding(new Insets(10));
 
         VBox contenidoLayout = new VBox(10);
-        contenidoLayout.setAlignment(Pos.TOP_CENTER);
+        contenidoLayout.setAlignment(Pos.TOP_LEFT);
+        //Introduccion sobre el prototipo
+        Label titulo1 = new Label("Introducción");
+        titulo1.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        TextFlow texto1 = new TextFlow();
+        texto1.setLineSpacing(5);
+        texto1.setTextAlignment(javafx.scene.text.TextAlignment.JUSTIFY);
+        texto1.getChildren().addAll(
+                new Text("""
+                        El presente proyecto tiene como objetivo la creación de una aplicación para administrar y gestionar proyectos de software. \nComo tal esta es una version de prototipo y no una version final pero puede probar la aplicacion y explorar sus herramientas.
+                        """));
+        Label titulo2 = new Label("Metodología Scrum");
+        titulo2.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 
-        Label titulo = new Label("Metodología Scrum");
-        titulo.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        TextFlow texto2 = new TextFlow();
+        texto2.setLineSpacing(5);
+        texto2.setTextAlignment(javafx.scene.text.TextAlignment.JUSTIFY);
 
-        TextFlow texto = new TextFlow();
-        texto.setLineSpacing(5);
-        texto.setTextAlignment(javafx.scene.text.TextAlignment.JUSTIFY);
-
-        texto.getChildren().addAll(
+        texto2.getChildren().addAll(
                 new Text("""
                         Scrum es una metodología ágil para la gestión y desarrollo de proyectos de software. Se basa en la idea de realizar el trabajo en iteraciones cortas y enfocarse en la entrega de incrementos de valor de forma regular.
 
@@ -99,11 +112,35 @@ public class Documentacion extends Application {
                 ex.printStackTrace();
             }
         });
+        texto2.getChildren().add(enlace);
 
-        texto.getChildren().add(enlace);
-        contenidoLayout.getChildren().addAll(titulo, texto);
+        // Agregar imágenes
+        Image imagenScrum1 = new Image("C:\\Users\\elioh\\OneDrive\\Documents\\GitHub\\BibliotecaDeCodigoPMI\\src\\main\\java\\com\\example\\bibliotecadecodigopmi\\gui\\sprint.png");
+        ImageView imageView1 = new ImageView(imagenScrum1);
+        imageView1.setFitHeight(250);
+        imageView1.setFitWidth(300);
 
-        documentacionLayout.setCenter(contenidoLayout);
+        Image imagenScrum2 = new Image("C:\\Users\\elioh\\OneDrive\\Documents\\GitHub\\BibliotecaDeCodigoPMI\\src\\main\\java\\com\\example\\bibliotecadecodigopmi\\gui\\ScrumMaster.png");
+        ImageView imageView2 = new ImageView(imagenScrum2);
+        imageView2.setFitHeight(250);
+        imageView2.setFitWidth(300);
+
+        // Posicionar imágenes
+        HBox imagenesLayout = new HBox(10);
+        imagenesLayout.setAlignment(Pos.CENTER);
+        imagenesLayout.getChildren().addAll(imageView1, imageView2);
+
+        contenidoLayout.getChildren().addAll(titulo1, texto1,titulo2, texto2, imagenesLayout);
+
+        // Agregar scroll pane
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(contenidoLayout);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setPrefSize(800, 600);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+
+        documentacionLayout.setCenter(scrollPane);
 
         return documentacionLayout;
     }

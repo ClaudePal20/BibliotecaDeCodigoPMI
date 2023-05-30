@@ -17,10 +17,10 @@ public class ProjectTest {
 
     @BeforeEach
     public void setUp() {
-        startDate = LocalDate.of(2023, 1, 1);
-        endDate = LocalDate.of(2023, 12, 31);
+        this.startDate = LocalDate.of(2023, 1, 1);
+        this.endDate = LocalDate.of(2023, 12, 31);
         List<Tarea> tareas = new ArrayList<>();
-        project = new Project("Test Project", startDate, endDate, tareas, "Budget", "Manager");
+        this.project = new Project("Test Project", startDate, endDate, tareas, "Budget", "Manager");
     }
 
     // Existing test cases...

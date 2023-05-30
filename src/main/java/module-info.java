@@ -16,6 +16,7 @@ module com.example.bibliotecadecodigopmi {
     requires org.apache.commons.io;
     requires java.desktop;
     requires org.junit.jupiter.api;
+    requires javafx.graphics;
 
     opens com.example.bibliotecadecodigopmi to javafx.fxml;
     exports com.example.bibliotecadecodigopmi.gui;

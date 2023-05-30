@@ -87,7 +87,7 @@ public class ProjectManager extends PMBOKLibraryGUI {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource domSource = new DOMSource(document);
-        StreamResult streamResult = new StreamResult(new File("projects.xml"));
+        StreamResult streamResult = new StreamResult(new File("proyectos2.xml"));
         transformer.transform(domSource, streamResult);
     }
 
@@ -140,7 +140,7 @@ public class ProjectManager extends PMBOKLibraryGUI {
     public List<Project> getProjects() {
         return projects;
     }
-    public void exportToMPXJ(List<Project> projects, String filename) {
+    public void exportToMPXJ(List<Project> projects) {
         try {
             ProjectFile projectFile = getProjectFile();
             for (Project project : projects) {
@@ -159,6 +159,7 @@ public class ProjectManager extends PMBOKLibraryGUI {
                     childTask.setFinish(date2);
                     childTask.setNotes(tarea.getDescripcion());
                 }
+                //
             }
             MPXWriter writer = new MPXWriter();
 

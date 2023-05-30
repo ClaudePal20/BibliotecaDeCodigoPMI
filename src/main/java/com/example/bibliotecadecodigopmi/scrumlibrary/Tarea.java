@@ -2,7 +2,7 @@ package com.example.bibliotecadecodigopmi.scrumlibrary;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-public class Tarea {
+public class Tarea{
     private String Nombre;
     private LocalDate FechaDeInicio;
     private LocalDate FechaDeTerminado;
@@ -19,10 +19,10 @@ public class Tarea {
         return Nombre;
     }
     public LocalDate getFechaDeInicio() {
-        return FechaDeInicio;
+        return this.FechaDeInicio;
     }
     public LocalDate getFechaDeTerminado() {
-        return FechaDeTerminado;
+        return this.FechaDeTerminado;
     }
     public void setResources(Recurso recurso) {
         this.recursos.add(recurso);
